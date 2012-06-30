@@ -90,7 +90,7 @@ sub run {
 	my %args = $self->build_args($code); 
 	my $token = $self->get_access_token( $code , %args );
 
-    if ( $ENV{DEBUG} } {
+    if ( $ENV{DEBUG} ) {
         use Data::Dumper;
         warn 'Got token';
         warn Dumper( $token );
