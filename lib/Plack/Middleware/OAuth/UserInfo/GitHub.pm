@@ -4,6 +4,7 @@ use strict;
 use parent qw(Plack::Middleware::OAuth::UserInfo);
 use LWP::UserAgent;
 use JSON;
+use Encode;
 # use Net::GitHub;
 
 sub create_handle {
@@ -16,14 +17,14 @@ sub query {
     # my $gh = $self->create_handle;
 
     my $ua = LWP::UserAgent->new;
-    my $uri = URI->new( 'https://github.com/api/v2/json/user/show' );
+    my $uri = URI->new( 'https://api.github.com/user' );
     $uri->query_form( access_token => $self->token->access_token );
     my $response = $ua->get( $uri );
     my $body = $response->decoded_content;
     return unless $body;
 
-    my $obj = decode_json( $body ) || { };
-    return $obj->{user};
+    my $obj = eval {decode_json( Encode::encode('UTF-8', $body) )} || { };
+    return $obj;
 }
 
 1;
